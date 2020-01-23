@@ -47,14 +47,17 @@ class GoogleMapPlotter(object):
         self.html_color_codes = html_color_codes
 
     @classmethod
-    def from_geocode(cls, location_string, zoom=13):
-        lat, lng = cls.geocode(location_string)
-        return cls(lat, lng, zoom)
+    def from_geocode(cls, location_string, zoom=13, pApiKey=''):
+        lat, lng = cls.geocode(location_string, , pApiKey)
+        return cls(lat, lng, zoom, pApiKey)
 
     @classmethod
-    def geocode(self, location_string):
-        geocode = requests.get(
-            'http://maps.googleapis.com/maps/api/geocode/json?address="%s"' % location_string)
+    def geocode(self, location_string, pApiKey=''):
+        if pApikey == '':
+            geocode = requests.get('http://maps.googleapis.com/maps/api/geocode/json?address="%s"' % location_string)
+        else:
+            geocode = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address="%s"' % location_string + "&key=" + pApikey)
+            
         geocode = json.loads(geocode.text)
         latlng_dict = geocode['results'][0]['geometry']['location']
         return latlng_dict['lat'], latlng_dict['lng']
